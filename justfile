@@ -2,7 +2,7 @@
 version := `cat VERSION`
 
 build:
-	echo '\newcommand{\paperversion}{{{{version}}}}' > src/version.tex
+	printf '\\\\newcommand{\\\\paperversion}{%s}' {{version}} > src/version.tex
 	tectonic -X build
 
 watch:
