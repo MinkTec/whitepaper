@@ -208,10 +208,92 @@ monitoring, where trunk angular velocities remain well below this threshold.
 
 Musculoskeletal disorders account for a disproportionate share of sick-leave days in
 nursing and care professions \cite{sun2023}.
+Across the broader German workforce, musculoskeletal diseases rank second among all
+causes of absence, representing 17.8\,\% of lost working days in 2024 --- behind only
+respiratory conditions and ahead of mental-health disorders
+(\cref{fig:au-causes}; \cite{dak2025}).
+In care professions, the musculoskeletal burden substantially exceeds this already
+elevated national baseline \cite{sun2023}.
 The specific risk factors --- sustained lumbar flexion while attending to patients in
 low hospital beds, asymmetric load transfer during manual patient handling, and
 repetitive trunk torsion --- are well characterised in the literature but poorly
 quantified in individual workers' actual shifts.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				xbar,
+				width=0.78\textwidth,
+				height=8.8cm,
+				bar width=5.5pt,
+				xlabel={Share of lost working days (\%)},
+				xmin=0, xmax=25,
+				xtick={0,5,10,15,20},
+				ytick=data,
+				yticklabels={
+						{Cardiovascular},
+						{Digestive},
+						{External causes},
+						{Nervous sys./senses},
+						{Infections},
+						{Unsp.\ symptoms},
+						{Other},
+						{Injuries},
+						{Mental disorders},
+						{Musculoskeletal},
+						{Respiratory},
+					},
+				yticklabel style={text width=3.8cm, align=right, font=\small\sffamily},
+				enlarge y limits=0.07,
+				clip=false,
+			]
+			% All 11 bars with value labels
+			\addplot[
+				xbar,
+				fill=minktecBlue!55,
+				draw=minktecBlue!70,
+				bar shift=0pt,
+				nodes near coords={%
+						\pgfmathprintnumber[fixed,precision=1]{\pgfplotspointmeta}\,\%},
+				every node near coord/.append style={
+						font=\footnotesize\sffamily,
+						xshift=3pt,
+						anchor=west,
+					},
+			] coordinates {
+					(3.3,  0)
+					(4.4,  1)
+					(4.4,  2)
+					(4.6,  3)
+					(5.8,  4)
+					(5.8,  5)
+					(7.5,  6)
+					(9.5,  7)
+					(17.4, 8)
+					(17.8, 9)
+					(19.4, 10)
+				};
+			% Overdraw musculoskeletal bar in brand navy
+			\addplot[
+				xbar,
+				fill=minktecNavy,
+				draw=minktecNavy,
+				bar shift=0pt,
+			] coordinates {
+					(17.8, 9)
+				};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Distribution of sick-leave days in Germany by disease category, 2024
+		(DAK-Gesundheit insured employees).
+		Musculoskeletal disorders (dark bar) are the second leading cause nationally,
+		exceeded only by respiratory diseases.
+		In nursing and care professions the musculoskeletal share substantially exceeds
+		this population-level figure \cite{sun2023}.
+		Source: \cite{dak2025}.}
+	\label{fig:au-causes}
+\end{figure}
 
 Conventional short-term ergonomic workplace observations suffer from the Hawthorne
 effect: workers modify their movement behaviour when they are aware of being observed,

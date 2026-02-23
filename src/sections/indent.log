@@ -1,6 +1,6 @@
 INFO:  latexindent.pl version 3.24.7, 2025-08-15, a script to indent .tex files
        latexindent.pl lives here: C:/Users/jonas/AppData/Roaming/MiKTeX/scripts/latexindent/
-       Mon Feb 23 11:32:31 2026
+       Mon Feb 23 12:03:14 2026
        Filename: E:\whitepaper\src\sections\validation.tex
 INFO:  Processing switches:
        -s|--silent: Silent mode active (you have used either -s or --silent)
@@ -38,7 +38,8 @@ INFO:  Backup procedure (-w flag active):
        E:\whitepaper\src\sections\validation.bak12 already exists, incrementing by 1 (see maxNumberOfBackUps)
        E:\whitepaper\src\sections\validation.bak13 already exists, incrementing by 1 (see maxNumberOfBackUps)
        E:\whitepaper\src\sections\validation.bak14 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       Backing up E:\whitepaper\src\sections\validation.tex to E:\whitepaper\src\sections\validation.bak15...
+       E:\whitepaper\src\sections\validation.bak15 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       Backing up E:\whitepaper\src\sections\validation.tex to E:\whitepaper\src\sections\validation.bak16...
        E:\whitepaper\src\sections\validation.tex will be overwritten after indentation
 INFO:  Phase 1: searching for objects
 INFO:  Phase 2: finding surrounding indentation

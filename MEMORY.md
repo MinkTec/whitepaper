@@ -3,7 +3,7 @@
 ## Completed Whitepapers
 | Slug | Stage | Strapi ID | Last Updated |
 |------|-------|-----------|--------------|
-| flextail-whitepaper | PDF compiled | N/A | 2026-02-23 |
+| flextail-whitepaper | Fact-checked + PDF recompiled | N/A | 2026-02-23 |
 
 ## Papers Already Read
 | ArXiv ID / DOI | Title | Saved To | Notes |
@@ -33,3 +33,33 @@
 - [2026-02-23] Tectonic.toml [[output]] `preamble` field path is relative to the src/ directory (not the project root). Use just "index.tex" not "src/index.tex".
 - [2026-02-23] BibTeX "internal consistency problem when checking if .bbl changed" warning is benign - PDF still compiles correctly through 6 passes.
 - [2026-02-23] Walkling 2025 was cited with wrong participant count (30→10), wrong activity count (14→11), wrong environment (outdoor→indoor only), and a fabricated 97%/10s window result. Always read the full paper before citing numbers.
+- [2026-02-23] refs.bib `spinalMouse` DOI `10.1007/s00586-019-05921-6` resolved to wrong paper (Watanabe AIS study). DOI removed from entry; correct DOI for van der Veen 2019 Idiag M360 paper not locatable.
+- [2026-02-23] refs.bib `sun2023` had wrong title, 10-wrong authors, and wrong PMID. Corrected to Weige Sun et al. meta-analysis (PMID 37124897, PMC10135498).
+- [2026-02-23] conclusions.tex claimed "four published or peer-reviewed studies" but Masch in-vitro is explicitly unpublished. Fixed to "three published peer-reviewed studies and one pre-publication in-vitro validation."
+- [2026-02-23] validation.tex overclaimed "not achieved by any single competing technology in the published literature." Toned down to "not demonstrated by the comparison technologies reviewed here."
+
+## Fact-Check Session Results (2026-02-23)
+Full fact-check report saved to: `src/fact_check_report.md`
+
+### Confirmed Errors Found:
+1. `limitations.tex` line 38: "30 participants" → CORRECT VALUE: **10 participants** (Walkling 2025 PMC12196833)
+2. `executive_summary.tex` line 29: "14-class HAR" → CORRECT VALUE: **11 activities** (Walkling 2025)
+3. `conclusions.tex` line 25–26: "across 14 daily activities" → CORRECT VALUE: **11 activities** (Walkling 2025)
+4. `refs.bib` `spinalMouse` DOI `10.1007/s00586-019-05921-6` → WRONG PAPER (resolves to Watanabe AIS study). Correct DOI for van der Veen, Holewijn & Smit 2019 "Idiag M360" paper NOT FOUND.
+5. `refs.bib` `sun2023` entry: wrong title (should be "Prevalence of WMSDs among Nurses: A Meta-Analysis"), wrong authors (should be Weige Sun et al.), wrong PMID (should be 37124897 not 37124926)
+
+### Confirmed Correct (Key Claims):
+- Walkling 2025: F1=0.90, standing-up 95%/76%, 10 participants, 11 activities — ALL CONFIRMED
+- Sawicki 2026: 60%/44%/37%/63% reductions — ALL CONFIRMED; seven Vicon Valkyrie VK16 cameras — CONFIRMED
+- Hartvigsen 2018 as leading LBP source — CONFIRMED
+- Belavy 2016 disc herniation risk — CONFIRMED
+- Burdorf/Sorock 1997 DOI — CONFIRMED
+- Sun 2023 77.2% WMSD prevalence in nurses — CONFIRMED (despite wrong BibTeX metadata)
+
+### Papers Fully Verified (read in this session or prior):
+- Walkling 2025 (PMC12196833) — full text read
+- Sawicki 2026 (doi:10.1007/s41693-025-00173-x) — abstract + methods section read
+- Sun 2023 (PMC10135498) — full text read
+- Belavy 2016 (doi:10.1007/s00586-015-3917-y) — abstract + open-access text read
+- Hartvigsen 2018 (doi:10.1016/S0140-6736(18)30480-X) — abstract confirmed
+- Burdorf/Sorock 1997 (doi:10.5271/sjweh.217) — abstract confirmed
