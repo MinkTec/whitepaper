@@ -1,0 +1,65 @@
+{
+  "mcp": {
+    "strapi": {
+      "type": "local",
+      "command": [
+        "infisical",
+        "run",
+        "--",
+        "uvx",
+        "--refresh",
+        "--from",
+        "git+ssh://git@github.com/MinkTec/infra-strapi.git#subdirectory=strapi-mcp-server",
+        "strapi-mcp-server"
+      ],
+      "environment": {
+        "STRAPI_HOST": "{env:STRAPI_HOST}",
+        "STRAPI_API_KEY": "{env:STRAPI_API_KEY}",
+        "STRAPI_API_KEY_READONLY": "{env:STRAPI_API_KEY_READONLY}",
+        "STRAPI_ADMIN_JWT_SECRET": "{env:STRAPI_ADMIN_JWT_SECRET}"
+      }
+    },
+    "arxiv-mcp-server": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "uv",
+        "tool",
+        "run",
+        "arxiv-mcp-server",
+        "--storage-path",
+        ".arxiv"
+      ]
+    },
+    "google-search": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@adenot/mcp-google-search"
+      ],
+      "environment": {
+        "GOOGLE_API_KEY": "AIzaSyBBGY29wohfWWji-1RV41-t_gZbn9Zw-hM",
+        "GOOGLE_SEARCH_ENGINE_ID": "a74706d13a9794ced"
+      }
+    },
+    "zotlink": {
+      "enabled": true,
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/onecalfman/zotlink",
+        "zotlink"
+      ],
+      "type": "local",
+    },
+    "exa-search": {
+      "enabled": true,
+      "type": "local",
+      "command": 
+      ["npx", "-y", "@smithery/cli@latest", "install", "exa", "--client", "claude"]
+    }
+  },
+  "$schema": "https://opencode.ai/config.json"
+}
