@@ -1,0 +1,42 @@
+% ============================================================
+\section{Conclusions}
+% ============================================================
+
+The fundamental tension in spine biomechanics research --- between the precision of
+laboratory optical capture and the ecological validity of ambulatory field measurement
+--- has not been resolved by conventional \acs{IMU} systems.
+Orientation integration accumulates drift, a single sensor on the thorax loses
+segmental context, and multi-sensor arrays introduce complexity that precludes
+long-term free-living deployment.
+
+Differential strain-gauge shape reconstruction addresses these constraints at the
+hardware level.
+By encoding curvature directly rather than integrating angular velocity, the sensor
+provides drift-free segmental resolution of the full thoracolumbar spine.
+Anchoring the reconstruction at the sacrum with a magnetometer-free \acs{IMU} preserves
+this accuracy in magnetically disturbed environments.
+
+The evidence reviewed here spans three independent research groups and four published
+or peer-reviewed studies:
+
+\begin{itemize}
+	\item Geometric accuracy matching clinical-grade instruments at \ang{0.8}--\ang{1.1}
+	      \acs{MAE} \cite{walkling2025}.
+	\item Activity recognition at F1\,=\,0.90 (1-second window) across 14 daily
+	      activities, with higher trunk-posture accuracy than a video baseline
+	      \cite{walkling2025}.
+	\item Quantification of real-world ergonomic improvements on an active construction
+	      site where no alternative sensor would function \cite{sawicki2026}.
+	\item Post-surgical \acs{ROM} measurement in a clinical pilot \cite{marx2023}.
+\end{itemize}
+
+Taken together, these results support positioning the FlexTail system as a capable
+research instrument for any study in which (a) continuous ambulatory spine kinematics
+are needed, (b) the measurement environment is magnetically disturbed or optically
+obstructed, or (c) participant burden must be low enough to sustain multi-day or
+multi-week wear.
+
+Researchers considering the system for clinical trials, occupational cohort studies,
+or sport biomechanics programmes are encouraged to request the raw-data specification
+and the \emph{flexlib} documentation from MinkTec to assess suitability for their
+specific measurement demands.

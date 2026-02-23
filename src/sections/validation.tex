@@ -1,0 +1,166 @@
+% ============================================================
+\section{Validation Evidence}
+% ============================================================
+
+\subsection{Geometric accuracy: in-vitro concurrent validity}
+
+Masch et al.\ evaluated the intrinsic measurement accuracy of the sensor using a
+standardised in-vitro protocol to eliminate the confounding influence of soft-tissue
+artefacts and inter-individual anatomical variation \cite{walkling2025}.
+Ten sensors were each applied ten times to precision 3D-printed templates representing
+defined flexion radii and specific torsion angles.
+
+Across all flexion templates, the \ac{MAE} was:
+
+\begin{itemize}
+	\item \SI{1.2}{\milli\metre} for 3D segment position.
+	\item \ang{1.1} for overall angular orientation.
+\end{itemize}
+
+On the spine-shaped template (anatomically realistic curvature):
+
+\begin{itemize}
+	\item Position \acs{MAE}: \SI{0.7}{\milli\metre}.
+	\item Angular \acs{MAE}: \ang{0.8}.
+	\item Torsion \acs{MAE}: \ang{0.4}.
+\end{itemize}
+
+\Cref{tab:accuracy} places these values in the context of other systems.
+
+\begin{table}[ht]
+	\centering
+	\caption{Comparative measurement accuracy across spine assessment systems.}
+	\label{tab:accuracy}
+	\small
+	\begin{tabularx}{\textwidth}{%
+		>{\bfseries\raggedright\arraybackslash}p{42mm}%
+		>{\raggedright\arraybackslash}p{27mm}%
+		>{\raggedright\arraybackslash}X%
+		>{\raggedright\arraybackslash}X}
+		\toprule
+		System                                          & Primary use             & Angular error & Measurement mode \\
+		\midrule
+		\rowcolor{rowgray}
+		Optical \acs{MoCap} (Vicon)                     & Lab biomechanics        &
+		\SI{0.154}{\milli\metre} RMSE~\cite{vicon_rmse} &
+		Static \& dynamic (lab only)                                                                                 \\
+		Idiag M360 (SpinalMouse)                        & Clinical diagnostics    &
+		\ang{1}--\ang{2}~\cite{spinalMouse}             &
+		Static (manual sweep)                                                                                        \\
+		\rowcolor{rowgray}
+		FlexTail (this system)                          & Research \& ambulatory  &
+		\ang{0.8}--\ang{1.1}~\cite{walkling2025}        &
+		Static \& dynamic (continuous)                                                                               \\
+		BodyGuard (occupational wearable)               & Occupational ergonomics &
+		$\approx\ang{2.5}$                              &
+		Dynamic (inclination only)                                                                                   \\
+		\rowcolor{rowgray}
+		Standard multi-IMU array                        & Field studies           &
+		$>\ang{5}$ incl.\ yaw drift~\cite{madgwick2011} &
+		Dynamic (drift-limited)                                                                                      \\
+		\bottomrule
+	\end{tabularx}
+\end{table}
+
+The FlexTail error range matches clinical-grade static instruments while enabling
+continuous ambulatory use --- a combination not achieved by any single competing
+technology in the published literature.
+
+\begin{figure}[!b]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				xbar,
+				width=0.82\textwidth,
+				height=6.5cm,
+				bar width=10pt,
+				xmin=0, xmax=6.5,
+				xlabel={Angular \acs{MAE} (\textdegree)},
+				symbolic y coords={
+						Multi-IMU with drift,
+						BodyGuard,
+						SpinalMouse,
+						FlexTail all templates,
+						FlexTail spine template
+					},
+				ytick=data,
+				nodes near coords,
+				nodes near coords align={horizontal},
+				enlarge y limits=0.18,
+				axis line style={draw=gray!60},
+				tick style={draw=gray!60},
+				grid=major,
+				grid style={dashed, gray!30},
+				extra x ticks={2},
+				extra x tick labels={},
+				extra x tick style={
+						grid=major,
+						grid style={red!60!black, dashed, thick},
+						tick style={draw=none},
+					},
+			]
+			\addplot[
+				fill=minktecBlue!80, draw=minktecBlue!80
+			] coordinates {
+					(5.5,Multi-IMU with drift)
+					(2.5,BodyGuard)
+					(1.5,SpinalMouse)
+					(1.1,FlexTail all templates)
+					(0.8,FlexTail spine template)
+				};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Angular mean absolute error comparison across spine assessment systems. The dashed red line at \ang{2} marks an informal clinical-use threshold. FlexTail on the spine-shaped template achieves \ang{0.8} MAE, placing it below all non-optical competitors. Values from \cite{walkling2025, spinalMouse, madgwick2011}; BodyGuard value from manufacturer specification.}
+	\label{fig:accuracy_bar}
+\end{figure}
+
+\subsection{Human activity recognition: comparison with video-based pose estimation}
+
+Walkling et al.\ (2025) conducted a direct comparison between FlexTail and a
+camera-based pose estimation model --- specifically OpenPose~1.7.0, which extracts
+25 body joint keypoints per frame --- across eleven \acp{ADL} \cite{walkling2025}.
+Ten healthy participants performed the protocol indoors, wearing the sensor shirt
+while a smartphone camera mounted on a tripod captured each session simultaneously.
+
+The authors selected the \ac{RDST} classifier for FlexTail time-series data and the
+QUANT classifier for the OpenPose keypoint sequences, both chosen as the best-performing
+algorithm for their respective modality from a benchmark of six state-of-the-art
+time-series classifiers.
+The dataset is small (10 subjects, $\approx$100 min total), and the authors
+explicitly note that performance differences between the two systems cannot be tested
+for statistical significance at this sample size.
+
+Key results:
+
+\begin{itemize}
+	\item At a \textbf{1-second} classification window, both systems achieved a mean
+	      \textbf{F1-score of 0.90} --- RDST for FlexTail and QUANT for camera data.
+	\item For \textbf{standing-up transitions}, the wearable achieved \textbf{95\,\%}
+	      accuracy versus \textbf{76\,\%} for the OpenPose model.
+\end{itemize}
+
+The camera model outperformed the wearable on activities that produce large, visually
+distinctive arm and hand movements --- eating, food cutting, and dishwasher
+loading/unloading --- confirming that camera-based and spine-based sensing are
+complementary rather than mutually exclusive.
+For trunk-posture and transition categories most relevant to clinical and ergonomic
+monitoring, the wearable provided consistently higher accuracy.
+
+The causal explanation is straightforward: the strain-gauge array provides an
+uninterrupted, occlusion-free kinematic signal of the spinal column.
+A pose estimation model inferring trunk kinematics from external joint-keypoint
+coordinates is sensitive to viewpoint variation and leg-crossing artefacts --- exactly
+the conditions that arise when the camera position is varied between participants, as
+it was in this study.
+
+\subsection{Post-surgical range of motion: clinical pilot}
+
+Marx et al.\ (2023) used the FlexTail sensor in a biomechanical pilot to measure \ac{ROM}
+before and after posterior corrective spinal fusion surgery (dorsale
+Korrekturspondylodese) \cite{marx2023}.
+The protocol quantified maximum segmental flexion, extension, lateral flexion, and
+torsion pre- and post-operatively, providing a continuous, objective complement to
+patient-reported outcome measures.
+The authors report accurate real-time 3D representation as the key methodological
+advantage over static radiological assessment, which captures morphology but not
+functional kinematics under load.

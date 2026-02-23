@@ -1,0 +1,57 @@
+INFO:  latexindent.pl version 3.24.7, 2025-08-15, a script to indent .tex files
+       latexindent.pl lives here: C:/Users/jonas/AppData/Roaming/MiKTeX/scripts/latexindent/
+       Mon Feb 23 11:32:49 2026
+       Filename: E:\whitepaper\src\index.tex
+INFO:  Processing switches:
+       -s|--silent: Silent mode active (you have used either -s or --silent)
+       -w|--overwrite: Overwrite mode active, will make a back up before overwriting
+INFO:  Directory for backup files and log file indent.log:
+       E:\whitepaper\src
+INFO:  Perl modules are being loaded from the following directories:
+       C:/Strawberry/perl/lib/FindBin.pm
+       C:/Strawberry/perl/vendor/lib/YAML/Tiny.pm
+       C:/Strawberry/perl/lib/File/Copy.pm
+       C:/Strawberry/perl/lib/File/Basename.pm
+       C:/Strawberry/perl/lib/Getopt/Long.pm
+       C:/Strawberry/perl/vendor/lib/File/HomeDir.pm
+INFO:  LatexIndent perl modules are being loaded from, for example:
+       C:/Users/jonas/AppData/Roaming/MiKTeX/scripts/latexindent/LatexIndent/Document.pm
+INFO:  YAML settings read: defaultSettings.yaml
+       Reading defaultSettings.yaml from C:/Users/jonas/AppData/Roaming/MiKTeX/scripts/latexindent/defaultSettings.yaml
+INFO:  YAML reading settings
+       Home directory is C:\Users\jonas
+       latexindent.pl didn't find indentconfig.yaml or .indentconfig.yaml
+       see all possible locations: https://latexindentpl.readthedocs.io/en/latest/sec-appendices.html#indentconfig-options)
+INFO:  Backup procedure (-w flag active):
+       E:\whitepaper\src\index.bak0 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak1 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak2 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak3 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak4 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak5 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak6 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak7 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak8 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak9 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak10 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak11 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak12 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak13 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak14 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak15 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak16 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak17 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak18 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak19 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak20 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       Backing up E:\whitepaper\src\index.tex to E:\whitepaper\src\index.bak21...
+       E:\whitepaper\src\index.tex will be overwritten after indentation
+INFO:  Phase 1: searching for objects
+INFO:  Phase 2: finding surrounding indentation
+INFO:  Phase 3: indenting objects
+INFO:  Phase 4: final indentation check
+INFO:  Output routine:
+       Overwriting file E:\whitepaper\src\index.tex
+       --------------
+INFO:  Please direct all communication/issues to:
+        https://github.com/cmhughes/latexindent.pl

@@ -1,0 +1,194 @@
+% ============================================================
+\section{Technology: Strain-Gauge Shape Reconstruction}
+% ============================================================
+
+\subsection{Physical measurement principle}
+
+FlexTail is a \SI{0.9}{\milli\metre}-thick flexible substrate of \ac{PET},
+carrying 18 pairs of printed strain gauges distributed along its
+length \cite{walkling2025, minktec2025}.
+Each pair is arranged symmetrically about the substrate centreline: one gauge on the
+left and one on the right of the midline axis.
+
+The measurement principle exploits differential strain.
+When the substrate bends --- as the spine curves during movement --- the material on the
+convex side experiences tensile stress (elongation) while the concave side experiences
+compressive stress simultaneously.
+These mechanical stresses alter the electrical resistance of the printed gauge traces
+in proportion to the local deformation.
+
+The microcontroller reads the differential resistance between each left--right pair
+at high frequency.
+The \emph{difference} between the two elements encodes the local bending magnitude
+(sagittal curvature radius at that segment).
+Crucially, when the loading is asymmetric --- one side stretched more than the other ---
+the ratio of the two signals encodes the local axial torsion of the strip about its
+longitudinal axis.
+Because almost all real-world spinal movements combine sagittal flexion with some
+degree of torsion (e.g., asymmetric lifting, golf backswing), this simultaneous
+capture of both degrees of freedom from a single sensor pair is a key architectural
+advantage.
+
+This direct mechanical coupling between substrate deformation and electrical output
+gives the measurement a fundamental advantage over orientation integration:
+curvature is measured, not computed by integrating angular velocity.
+There is no accumulation of integration noise over time.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[>=Stealth, font=\small]
+		% ---- Left panel: straight strip ----
+		\begin{scope}
+			% Strip body
+			\fill[gray!20] (0,0) rectangle (3.2, 0.45);
+			\draw[thick] (0,0) rectangle (3.2, 0.45);
+			% Centreline
+			\draw[dashed, gray] (0, 0.225) -- (3.2, 0.225);
+			% Left gauge markers (top half, 4 marks)
+			\foreach \x in {0.4, 1.0, 1.6, 2.2, 2.8} {
+					\draw[minktecBlue, thick] (\x, 0.225) -- (\x, 0.42);
+				}
+			% Right gauge markers (bottom half, 4 marks)
+			\foreach \x in {0.4, 1.0, 1.6, 2.2, 2.8} {
+					\draw[red!70!black, thick] (\x, 0.225) -- (\x, 0.03);
+				}
+			% Labels
+			\node[minktecBlue, above] at (1.6, 0.45) {$R_L$};
+			\node[red!70!black, below] at (1.6, 0) {$R_R$};
+			\node[below=6pt] at (1.6, 0) {\textit{Straight}\quad $\Delta R = 0$};
+		\end{scope}
+
+		% Arrow between panels
+		\draw[->, thick] (3.5, 0.225) -- (4.3, 0.225)
+		node[midway, above, font=\footnotesize] {bend};
+
+		% ---- Right panel: bent strip ----
+		\begin{scope}[xshift=4.6cm]
+			% Curved strip: convex top edge, concave bottom edge
+			% Outer (convex) arc in blue
+			\draw[minktecBlue, very thick]
+			(0, 0.5) .. controls (1.0, 1.4) and (2.2, 1.4) .. (3.2, 0.5);
+			% Inner (concave) arc in red
+			\draw[red!70!black, very thick]
+			(0, 0.1) .. controls (1.0, 0.9) and (2.2, 0.9) .. (3.2, 0.1);
+			% Fill strip area
+			\fill[gray!15, opacity=0.6]
+			(0, 0.1) .. controls (1.0, 0.9) and (2.2, 0.9) .. (3.2, 0.1) --
+			(3.2, 0.5) .. controls (2.2, 1.4) and (1.0, 1.4) .. (0, 0.5) -- cycle;
+			% Labels
+			\node[minktecBlue, above right] at (2.6, 1.25) {convex (tension)};
+			\node[red!70!black, below right] at (2.6, 0.2) {concave (compression)};
+			\node[below=6pt, align=center] at (1.6, 0) {$D = R_L - R_R \propto \kappa$};
+		\end{scope}
+	\end{tikzpicture}
+	\caption{Differential strain-gauge principle. On a straight strip (left) the left ($R_L$) and right ($R_R$) gauges are under equal load; their difference $D = 0$. Under bending (right) the convex edge elongates and the concave edge compresses; $D \propto \kappa$ encodes the local curvature~$\kappa$.}
+	\label{fig:sensor_principle}
+\end{figure}
+
+\subsection{Sacral IMU and Denavit--Hartenberg reconstruction}
+
+The strain-gauge array captures the \emph{relative} shape of the spine --- how each
+segment curves relative to its neighbour.
+To express this shape in a gravity-referenced coordinate frame, a six-axis \acs{IMU}
+(three-axis accelerometer and three-axis gyroscope, \emph{no magnetometer}) is fixed
+to the base housing at sacral level (S1).
+
+The software reads the sacral pitch and roll continuously and uses these as the
+gravitational anchor for the kinematic chain.
+Starting from this anchored base orientation, a series of \ac{DH}
+transformations \cite{denavit1955} propagates the local curvature angles upward through the 18
+virtual joints, treating each measurement site as an articulating node of a
+robot arm.
+Successive matrix multiplication yields the absolute 3D Cartesian coordinates (in mm)
+of each segment at each time step.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[>=Stealth, font=\small,
+			joint/.style={circle, draw=minktecNavy, fill=minktecBlue!20, minimum size=7pt, inner sep=0pt},
+			lbl/.style={font=\footnotesize, minktecNavy}]
+
+		% Joints: placed along a gentle S-curve to suggest spine shape
+		% Coordinates (x, y): base at bottom
+		\coordinate (J1) at (0, 0);      % S1 (sacrum)
+		\coordinate (J2) at (0.15, 1.0);
+		\coordinate (J3) at (0.25, 2.0);
+		\coordinate (J4) at (0.20, 3.0);
+		\coordinate (J5) at (0.05, 4.0);
+		\coordinate (J6) at (-0.15, 5.0);
+		\coordinate (J7) at (-0.25, 6.0); % T6
+
+		% Gravity anchor at base
+		\draw[thick, ->, gray] (J1) ++(0, -0.8) -- (J1)
+		node[midway, right, font=\footnotesize, gray] {gravity};
+		\draw[dashed, gray, very thin] (J1) ++(0, -0.8) ++(0.6,0) -- ++(-1.2, 0);
+
+		% Links (spine segments)
+		\draw[minktecNavy, thick]
+		(J1) -- (J2) -- (J3) -- (J4) -- (J5) -- (J6) -- (J7);
+
+		% Joint nodes
+		\foreach \j/\name in {J1/S1, J2/$j_2$, J3/$j_3$, J4/$j_4$, J5/$j_5$, J6/$j_6$, J7/T6} {
+				\node[joint] at (\j) {};
+				\node[lbl, right=4pt] at (\j) {\name};
+			}
+
+		% Angle annotation at J3
+		\draw[minktecBlue, ->, thin]
+		($(J2)!0.55!(J3)$) arc[start angle=90, end angle=60, radius=0.35]
+		node[right, font=\footnotesize, minktecBlue] {$\theta_i$};
+
+		% DH label
+		\node[align=left, font=\footnotesize, gray] at (1.5, 3.0)
+		{$\mathbf{T}_i = \mathbf{R}(\theta_i)\mathbf{d}_i$};
+
+	\end{tikzpicture}
+	\caption{Denavit--Hartenberg kinematic chain. The sacral \acs{IMU} anchors joint~S1 to the gravity frame. Each subsequent joint~$j_i$ through T6 is connected by a local DH transformation~$\mathbf{T}_i$ parameterised by the differential strain angle~$\theta_i$, yielding absolute 3D coordinates of all 18 segments.}
+	\label{fig:dh_chain}
+\end{figure}
+
+The detailed implementation of the DH reconstruction and the hysteresis-based postural
+state filters is described in \cref{sec:software}.
+
+\subsection{Magnetometer-free design}
+
+The deliberate omission of a magnetometer removes a critical failure mode for
+in-the-wild use.
+Standard IMU fusion algorithms use the magnetometer to correct yaw drift by referencing
+magnetic north.
+In industrial, clinical, and domestic environments --- steel reinforcement in
+buildings, electric motors in care beds, medical equipment, and ordinary
+computer monitors --- local field distortions render the compass dysfunctional,
+producing unbounded yaw error over multi-hour recordings \cite{madgwick2011}.
+
+Yaw drift is instead managed by the \emph{flexlib} software through kinematic
+heuristics and postural state logic described in \cref{sec:software}.
+The resulting yaw stability is adequate for the postural and activity-recognition
+tasks described in this document.
+The system does not claim sub-degree absolute yaw accuracy in free ambulation;
+see \cref{sec:limitations} for a quantitative characterisation.
+
+To further minimise signal drift caused by moisture during physical exertion,
+MinkTec collaborates with TracXon in the framework of the BMBF project
+\emph{ErgoFee} (KMU-innovativ programme) to evaluate alternative pastes and
+substrates for screen-printing the conductive traces and to maximise the
+mechanical robustness of the printed gauge structures.
+
+\subsection{Textile integration and soft-tissue artefact mitigation}
+
+The sensor strip is sewn into a compression undergarment (Sensor\-shirt), available in
+two lengths: 36\,cm (covering the lumbosacral and lower thoracic spine) and 45\,cm
+(extending into the upper thoracic region).
+The constant, defined contact pressure of the compression knit keeps the strip aligned
+with the spinal column throughout movement, minimising the soft-tissue artefacts that
+degrade surface-mounted sensors in dynamic tasks.
+
+For scenarios in which a compression garment cannot be worn --- prolonged bed rest,
+post-operative monitoring, or spaceflight environments --- the sensor strip can be
+fixed directly to the skin using medical-grade adhesive patches, maintaining full
+mechanical coupling without external compression.
+
+The total system weight is 30\,g.
+The integrated 300\,mAh lithium-ion cell provides up to 30\,h of continuous recording.
+The hardware module detaches from the shirt, allowing standard machine laundering
+and enabling use in clinical hygiene cycles.

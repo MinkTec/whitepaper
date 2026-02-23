@@ -1,0 +1,260 @@
+% ============================================================
+\section{Application Domains}
+% ============================================================
+
+\subsection{Sleep position monitoring}
+
+The monitoring of spinal posture during sleep represents the primary disruptive
+application for direct 3D shape reconstruction, and the one in which the technology's
+advantages over current alternatives are most pronounced.
+
+\subsubsection{Methodological limitations of indirect mattress sensing}
+
+Consumer systems and research mattress sensors infer sleeping posture from pressure
+distributions beneath the body surface, estimating whether a person lies on their left
+or right side.
+This approach characterises the mechanics of the mattress surface, not of the spine
+itself.
+Mattress pressure reflects the distribution of body mass across the support surface;
+it does not measure vertebral curvature, inter-segment torsion, or lumbosacral
+lordosis angle.
+In orthopaedic terms, these mattress-derived classifications are methodological
+workarounds: the variables of clinical interest are in the spine, and the sensor is
+in the mattress.
+Optical cameras placed above the bed face equivalent limitations --- they estimate
+trunk pose from external silhouette data, are sensitive to bedding occlusion, and
+cannot resolve inter-vertebral angles at clinical precision.
+
+\subsubsection{Direct spinal measurement during sleep}
+
+Placed in a compression shirt overnight, FlexTail measures five spinal metrics
+continuously, none of which is accessible to mattress or camera systems:
+
+\begin{enumerate}
+	\item Lumbar curvature (L-spine angle in the sagittal plane).
+	\item Lateral flexion of the lumbar and lower thoracic spine.
+	\item Localised axial torsion (inter-vertebral rotation about the longitudinal axis).
+	\item Upper thoracic curvature (shoulder-girdle level).
+	\item Lumbosacral lordosis and thoracic kyphosis angles.
+\end{enumerate}
+
+\subsubsection{Drift advantage in the sleep context}
+
+Yaw drift --- the primary dynamic limitation of IMU-based systems in high-speed
+activity --- is substantially reduced in the sleep context.
+Postural transitions during sleep occur over minutes rather than seconds.
+The slow rate of change allows the \emph{flexlib} software to identify drift
+trajectories precisely and correct them post-hoc, producing accurate curvature
+records even over multi-hour recordings without requiring magnetometer input.
+
+\subsubsection{Automated cloud-based data workflow}
+
+Longitudinal sleep studies traditionally require manual data collection: researchers
+visit participants periodically to extract files from recording devices.
+The FlexTail system automates this workflow.
+The participant activates the sensor, pairs it with the smartphone application, and
+begins sleep.
+Data are transmitted to the cloud infrastructure during or after the recording
+session, eliminating manual file transfers and the associated transcription errors.
+
+\subsection{Occupational health: construction ergonomics}
+
+The clearest published demonstration of FlexTail's advantage in uncontrolled
+environments comes from Sawicki, D{\"u}king et al.\ (2026) at TU Braunschweig
+\cite{sawicki2026}.
+The study compared musculoskeletal loading in two concrete construction processes:
+conventional manual casting and a novel collaborative \ac{SC3DP}
+process in which workers guide a robotic arm rather than handle materials directly.
+
+The study's measurement stack illustrates precisely why a dedicated spinal sensor is
+necessary even when full optical infrastructure is available.
+Sawicki et al.\ deployed seven Vicon Valkyrie VK16 cameras covering the entire working
+volume, with retroreflective targets fixed to each worker's helmet.
+This system successfully tracked head position throughout the production runs and
+yielded the covered-distance figures reported in the results.
+It provided no information about the spine.
+Helmet-marker trajectory records where a worker walked; it does not record whether
+the lumbar spine was flexed, how far, or for how long.
+Recovering vertebral curvature from optical data would require dense marker arrays
+mounted directly over each spinal segment --- impractical on workers handling
+reinforcement bars and concrete hose in a live fabrication environment.
+FlexTail, worn inside the standard shirt, delivered continuous spinal posture data
+under exactly those conditions, yielding the 60\,\% reduction in flexed-posture time
+that is the study's principal ergonomic finding.
+
+A second methodological advantage is relevant here: because the Sensorshirt is
+indistinguishable from ordinary workwear, participants are unaware of ongoing kinematic
+recording during normal work.
+This eliminates the Hawthorne effect --- the well-documented modification of behaviour
+that occurs when participants know they are being observed during short ergonomic
+assessments --- and produces kinematic data representative of habitual practice.
+
+Results showed that \acs{SC3DP} reduced:
+
+\begin{itemize}
+	\item Time in flexed spinal postures by \textbf{60\,\%}.
+	\item Total carried weight by \textbf{44\,\%}.
+	\item Distance walked per task by \textbf{37\,\%}.
+	\item Perceived exertion (Borg and NASA-TLX scores) by \textbf{63\,\%}.
+\end{itemize}
+
+Objective physiological markers (heart rate, blood lactate) were unchanged between
+conditions, indicating that SC3DP substituted physical for cognitive demands rather
+than reducing total strain.
+Task-level productivity was approximately three times higher in the robotic condition.
+
+The study exemplifies a methodological pattern likely to recur across construction,
+logistics, mining, and process industries: optical infrastructure can be present and
+still leave spinal ergonomics unmeasured, because marker placement on a moving torso
+is incompatible with physical work.
+Wearable shape reconstruction fills that specific gap without displacing other
+instrumentation.
+
+\subsection{Clinical rehabilitation and post-surgical follow-up}
+
+Standard post-surgical assessment relies on static in-clinic \acs{ROM} tests and
+patient-reported questionnaires.
+The sensitivity of both methods is limited: ROM tests capture behaviour during a brief,
+supervised session; questionnaires are subject to recall bias, social desirability
+effects, and response shift \cite{natarajan2023}.
+
+Continuous ambulatory recording with FlexTail enables a different approach.
+The raw curvature stream contains all information needed to extract standardised ROM
+metrics: maximum segmental flexion, extension, lateral flexion, and torsion angles can
+be computed automatically from any movement episode that elicits them, whether during
+a formal test or spontaneously during daily life.
+The software also computes a calibrated posture score --- a composite metric weighted
+by the duration and severity of postural deviations from a neutral reference --- that
+tracks functional recovery over weeks without requiring repeated clinical visits.
+
+The Lindenhofgruppe (Switzerland), under PD Dr.\ med.\ Emin Aghayev, is currently
+using the technology to quantify spine mobility trajectories in free-living patients
+following spinal surgery \cite{marx2023}.
+This collaboration is ongoing; no peer-reviewed publication from the free-living phase
+is available at the time of writing.
+
+\subsection{Sport biomechanics and fitness tracking}
+
+In resistance training and sport, the clinically meaningful quantity is not whether
+a movement is performed but \emph{how}.
+The FlexTail sensor quantifies execution quality in exercises where the spine is the
+primary measurement site.
+
+\subsubsection{Squat: pelvic tilt detection and longitudinal progression}
+
+During a barbell back squat, lumbar neutral must be maintained through the descent.
+Loss of lumbar lordosis (``butt wink'') at depth increases compressive and shear loads
+on the posterior disc and facet joints.
+The FlexTail base-IMU records vertical displacement as the proxy for squat depth;
+the strain-gauge array records lumbar curvature simultaneously.
+The software reports the precise percentage of descent at which neutral is lost for
+each individual repetition, providing trainers and physiotherapists with an objective
+time course of lumbar control rather than a binary pass/fail judgement.
+
+Longitudinal tracking quantifies physiological adaptation directly.
+In a pilot observation, a participant who initially lost lumbar neutrality at 50\,\% of
+squat depth maintained neutral to 90\,\% of depth following an eight-week training
+intervention --- an objective kinematic outcome that could not have been derived from
+self-report or visual inspection alone.
+
+The same principle applies to push-up lumbar sag (where the sensor detects progressive
+extension loss across a set) and overhead-press spinal extension under fatigue.
+Bench press, performed in strict supine position, is the principal exercise where
+the dorsal placement of the sensor limits measurement utility.
+
+\subsubsection{Movement archetypes}
+
+The five movement archetypes framework --- hip-hinge, squat, push, pull, carry ---
+maps naturally to the continuous curvature and torsion signal from the sensor array.
+Deadlift and Romanian deadlift generate characteristic sagittal flexion-extension
+curves; overhead press generates thoracolumbar extension; loaded rows generate
+asymmetric torsion signals.
+Each archetype produces a kinematically distinct fingerprint that can be used to
+train activity-classification models analogous to those validated by Walkling et al.\
+for \acs{ADL} recognition \cite{walkling2025}.
+
+\subsubsection{High-speed sport: golf and equestrian}
+
+Preliminary observations in golf demonstrated that spinal posture errors during the
+backswing and follow-through (e.g., reverse spine angle) are distinguishable from
+correct mechanics by inspection of the raw curvature trace.
+In an experimental setup with amateur golfers, the technology differentiated incorrect
+from correct swings by visual inspection of generated data traces; automated
+machine-learning classification of such errors is under development.
+
+Equestrian sport --- particularly dressage --- presents a complementary case where
+spinal posture is not incidental but constitutively scored.
+FEI judging criteria for collected movements and piaffe explicitly penalise rider
+collapse in the lumbar spine, lateral trunk lean, and behind-the-vertical seat
+position, all of which produce distinct curvature and torsion signatures in the
+sensor array.
+Unlike the ballistic constraints of a golf swing, dressage posture is sustained
+across movements lasting tens of seconds, placing it well within the validated
+velocity envelope of the current sensor stack.
+Continuous recording across a training session can therefore quantify postural
+compliance with competition standards, identify fatigue-related collapse in
+thoracolumbar extension, and provide objective feedback to replace the
+inherently intermittent input of a trainer observing from the arena.
+
+Automated classification of ballistic sport errors --- relevant to the golf case ---
+requires handling the high angular
+accelerations that produce significant short-term \acs{IMU} transients.
+Sport-specific filter tuning to address this is an active area of development, and the
+current software stack is not validated for movements faster than approximately
+60\,\si{\degree\per\second}; this constraint does not apply to equestrian posture
+monitoring, where trunk angular velocities remain well below this threshold.
+
+\subsection{Occupational health: nursing and care work}
+
+Musculoskeletal disorders account for a disproportionate share of sick-leave days in
+nursing and care professions \cite{sun2023}.
+The specific risk factors --- sustained lumbar flexion while attending to patients in
+low hospital beds, asymmetric load transfer during manual patient handling, and
+repetitive trunk torsion --- are well characterised in the literature but poorly
+quantified in individual workers' actual shifts.
+
+Conventional short-term ergonomic workplace observations suffer from the Hawthorne
+effect: workers modify their movement behaviour when they are aware of being observed,
+systematically underrepresenting habitual postural load.
+Longitudinal wearable monitoring with the Sensorshirt eliminates this confound.
+Workers wear the shirt throughout normal shifts without modifying routine; the
+recording is continuous, invisible under standard uniforms, and extends over weeks.
+
+Analysis of these recordings in FlexLab Studio consistently reveals sharp
+discrepancies between workers' subjective perception of their postural load and the
+objectively measured biomechanical exposure: participants frequently underestimate the
+duration of sustained hyperkyphosis and the torsional load during patient transfers.
+
+Pilot programmes integrating the Sensorshirt into occupational health management in
+collaboration with major health insurance funds have demonstrated a measurable
+intervention effect.
+Vibration feedback from the onboard motor, triggered when cumulative time in
+hyperkyphosis or high torsion exceeds configurable thresholds, increased the proportion
+of working time spent in an upright spinal posture from approximately 10\,\% to
+15\,\% in one pilot cohort.
+This improvement was associated with a reduction in self-reported acute low-back pain
+among participants.
+These results are from internal pilot data; peer-reviewed validation is in progress.
+
+\subsection{Space medicine}
+
+In microgravity, the absence of axial compressive loading allows spinal discs to
+absorb fluid, elongating the spine by several centimetres \cite{belavy2016}.
+Simultaneously, paraspinal musculature atrophies without gravitational loading stimulus.
+This combination predisposes returning astronauts to acute disc herniation during
+re-exposure to normal gravity: Belavy et al.\ (2016) document elevated herniation risk
+in the post-flight period compared with pre-flight baseline \cite{belavy2016}.
+
+Mapping how vertebral curvature, inter-segment flexibility, and muscle-supported
+posture change across simulated microgravity (such as head-down tilt bed rest) requires
+a sensor that can be applied longitudinally without radiation exposure and without a
+motion-capture laboratory.
+
+MinkTec is collaborating with the UZH Space Hub and the \ac{ESA} on this question.
+The technology is being evaluated in the ThromBoShift bed-rest study, which uses
+head-down tilt as a controlled analogue of spaceflight-induced spinal unloading.
+Because the compression shirt cannot be worn during prolonged bed rest (risk of
+skin-surface displacement under continuous dorsal loading), the protocol uses
+medical-grade adhesive patches to fix the sensor strip directly to the skin,
+preserving full mechanical coupling.
+No peer-reviewed data from this collaboration are available at the time of writing.

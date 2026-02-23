@@ -1,0 +1,47 @@
+% ============================================================
+\section{Limitations and Research Gaps}
+% ============================================================
+
+An honest characterisation of the system's current boundaries is necessary for
+researchers designing studies around it.
+
+\begin{description}
+	\item[Yaw drift in prolonged ambulation.]
+	      The magnetometer-free design eliminates magnetic interference but accepts a slow
+	      yaw drift during extended free ambulation.
+	      For tasks that require absolute yaw accuracy (e.g., three-dimensional rotation
+	      analysis during rotation-heavy sport), the kinematic correction algorithms may be
+	      insufficient without periodic reset manoeuvres.
+
+	\item[Ballistic movement transients.]
+	      The current filtering stack is optimised for movements below approximately
+	      \SI{60}{\degree\per\second}.
+	      High-speed ballistic actions (golf swing, sprint, jump landing) produce \acs{IMU}
+	      transients that inflate short-term position error.
+	      Sport-specific validation studies are needed before deploying the system in
+	      these contexts.
+
+	\item[Upper cervical coverage.]
+	      The longest sensor variant (45\,cm) covers the sacrum through the upper thoracic
+	      spine.
+	      Cervical kinematics require a separate cervical attachment, which is not
+	      commercially available at present.
+
+	\item[Masch et al.\ validation data.]
+	      The geometric accuracy figures cited in this document are drawn from an
+	      in-vitro study referenced in Walkling et al.\ \cite{walkling2025} but not yet
+	      published as a standalone peer-reviewed paper.
+	      Independent replication and full methodological reporting of this validation remain
+	      outstanding.
+
+	\item[Population diversity in \ac{HAR} models.]
+	      The Walkling et al.\ HAR study involved 30 participants \cite{walkling2025}.
+	      Generalisation to populations with pathological spinal morphology (scoliosis,
+	      post-surgical fusion, severe osteoporosis) has not been assessed.
+
+	\item[Long-term sensor drift and mechanical fatigue.]
+	      Printed strain gauges may exhibit electrical resistance drift and mechanical
+	      hysteresis after extended use and repeated laundering cycles.
+	      Long-term test data on measurement stability across sensor lifetime have not been
+	      published.
+\end{description}

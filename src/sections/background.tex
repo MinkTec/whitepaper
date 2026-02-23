@@ -1,0 +1,112 @@
+% ============================================================
+\section{Background}
+% ============================================================
+
+\subsection{The longitudinal measurement gap in spine biomechanics}
+
+The aetiology of non-specific \ac{LBP} --- the leading cause of years lived
+with disability globally \cite{hartvigsen2018} --- is rarely a single traumatic event.
+It reflects the cumulative effect of repetitive microtrauma: sustained flexed postures at
+a desk, asymmetric load bearing in care work, or hours spent in suboptimal sleep
+positions \cite{burdorf1997}.
+Identifying the specific movement habits that drive individual pathology requires
+measurement instruments capable of operating continuously in real-world environments,
+not just for the duration of a laboratory session.
+
+Contemporary assessment options divide into four categories, each with a decisive
+limitation for this purpose.
+
+\subsection{The clinical diagnostic blind spot}
+
+Radiological imaging --- conventional X-ray, \ac{MRI}, and \ac{CT} --- provides
+indispensable high-resolution information about bony structures and soft tissue.
+From a biomechanical perspective, however, these modalities yield only a static
+snapshot.
+A patient lying in an MRI scanner is in a supine, fully unloaded position in which
+gravitational forces on the intervertebral discs are minimal.
+The resulting images show the morphological state --- a compressed disc prolapse,
+a degenerative spinal canal stenosis, or facet-joint arthrosis --- but contain no
+causal information about the dynamic mechanical exposure in daily life that drove
+that tissue degeneration \cite{natarajan2023}.
+
+Non-invasive surface measurement systems such as rastersterography and mechanical
+measuring wheels (e.g., the Idiag M360 / SpinalMouse) capture sagittal and frontal
+curvature with high precision and without radiation \cite{spinalMouse}.
+These instruments are well suited to supervised in-clinic assessments and therapeutic
+follow-up, but by design they yield a single static snapshot taken during a brief,
+controlled examination session.
+
+Once a patient leaves the clinic and returns to daily life, a large diagnostic blind
+spot opens.
+The exposure events most relevant to pathogenesis --- hours of sustained lumbar flexion
+at a PC workstation, asymmetric lifting of patients from low hospital beds, monotonous
+load carrying in logistics work, or prolonged adverse sleep positions --- are entirely
+invisible to objective measurement.
+In this vacuum, research frequently relies on Patient-Reported Outcome Measures
+(\acp{PROM}).
+These instruments carry well-documented susceptibility to recall bias, social
+desirability effects, and cognitive distortion, limiting their validity for
+establishing causal relationships between daily postural habits and pain
+episodes \cite{natarajan2023}.
+
+\subsection{Optical motion-capture systems}
+
+Optoelectronic systems such as Vicon, Qualisys, and OptiTrack track retro-reflective
+markers with sub-millimetre precision --- Ehara et al.\ report RMSE values around
+0.154\,mm for Vicon \cite{vicon_rmse} --- and have served as the biomechanical reference
+standard for decades.
+Three structural constraints prevent deployment outside a dedicated capture volume.
+
+First, the technology requires a calibrated array of synchronised infrared cameras;
+transporting and recalibrating this array for a building site, a care ward, or a
+patient's bedroom is impractical.
+Second, any occlusion of the marker-to-camera line of sight --- by furniture, protective
+equipment, a patient in a hospital bed, scaffolding, or ordinary clothing --- causes
+immediate data loss or trajectory interpolation artefacts.
+Third, the requirement to affix dozens of spherical markers to anatomical landmarks on
+the skin (or tight-fitting specialised clothing) places participants in a manifestly
+artificial laboratory environment.
+This \emph{lab effect} compromises ecological validity: participants modify their
+natural movement behaviour under camera observation and equipment constraints, so the
+recorded postures no longer represent their true everyday kinematics.
+
+Marker-less deep-learning pose estimation reduces setup burden but retains
+occlusion sensitivity, is vulnerable to changes in viewpoint and illumination,
+and cannot resolve inter-vertebral angles with the precision required for clinical
+spine metrics.
+
+\subsection{Standard inertial measurement units}
+
+A single \acs{IMU} placed on the thorax measures the global inclination of the upper torso
+relative to gravity.
+This tells a researcher how far the torso is tilted, but not \emph{where along the
+	spine} the flexion occurs --- whether the pelvis has rotated on an extended lumbar spine
+or whether a pathological thoracic kyphosis is responsible.
+This distinction is clinically essential: the biomechanical consequences of hip-hinge
+flexion with a neutral lumbar spine are entirely different from those of lumbar and
+thoracic hyperkyphosis under load \cite{burdorf1997}.
+
+Arrays of multiple \acp{IMU} can partially resolve segmentation, but the approach
+scales poorly.
+Full-body suits carrying up to 17 individual Bluetooth nodes are thermally
+uncomfortable for participants, prone to displacement during occupational or athletic
+activity, and difficult to synchronise reliably over extended recording
+periods.
+Rigid kinematic model assumptions about the chain between individual sensor sites
+frequently diverge from physiological reality.
+More critically, standard \acs{IMU} fusion algorithms use a magnetometer to correct yaw
+drift.
+In environments containing ferromagnetic structures --- steel reinforcement, hospital
+beds, electric motors, or computer hardware --- local field distortion renders the
+compass dysfunctional and introduces unbounded yaw error within minutes
+\cite{madgwick2011}.
+
+\subsection{Static clinical surface measurement}
+
+Instruments such as the Idiag M360 (SpinalMouse) provide sagittal and frontal
+curvature data with high accuracy (published precision \ang{1}--\ang{2};
+\cite{spinalMouse}) and without radiation exposure.
+They are well suited to supervised in-clinic assessments and therapeutic follow-up, but
+by design they yield a single static snapshot.
+They cannot record what happens to the lumbar spine during eight hours of warehouse work
+or across a night's sleep.

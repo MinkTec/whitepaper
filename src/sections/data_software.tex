@@ -1,0 +1,185 @@
+% ============================================================
+\section{Software Ecosystem and Research Infrastructure}
+\label{sec:software}
+% ============================================================
+
+The scientific value of any measurement system depends not only on hardware precision
+but on the transparency of the software stack and the researcher's unrestricted
+access to raw signal data.
+Proprietary black-box systems that withhold signal-level access and expose only
+opaque aggregated metrics do not qualify for rigorous academic study.
+The FlexTail ecosystem was designed from the outset for complex longitudinal
+data analysis.
+
+\subsection{Configurable acquisition rates}
+
+To accommodate experimental designs with very different resolution requirements, the
+system supports a continuously adjustable sampling rate.
+
+For epidemiological long-term recordings over multiple days --- characterising daily
+sitting time, postural load distribution in a nursing shift, or nightly sleep
+patterns --- a rate of 1--25\,Hz provides the necessary temporal resolution while
+conserving battery life.
+
+For high-dynamic biomechanical investigations --- gait analysis, sit-to-stand
+transitions, resistance training kinematics, or rehabilitation assessments requiring
+sub-degree temporal resolution of rapid movements --- the rate can be raised to
+100\,Hz \cite{walkling2025}.
+
+\subsection{The \emph{fiffi} middleware layer}
+
+Bluetooth Low Energy (\acs{BLE}) connectivity dropouts represent a persistent source of
+data loss in wearable field studies.
+The \emph{fiffi} middleware, written in C and running directly on the sensor
+microcontroller, eliminates this failure mode through autonomous buffering.
+
+When the \acs{BLE} link to the gateway device is interrupted --- because the participant
+leaves their smartphone at a desk, moves through a shielded area, or enters
+electromagnetic interference --- \emph{fiffi} immediately transitions the sensor to
+standalone data-logger mode.
+All angular and \acs{IMU} data are written to internal flash memory at the configured
+sampling rate.
+On reconnection, \emph{fiffi} initiates a prioritised, lossless flash-synchronisation
+transfer, restoring the complete continuous time series without gaps \cite{walkling2025}.
+
+This architecture ensures that multi-day field recordings are not compromised by
+the connectivity conditions of uncontrolled environments such as hospital wards,
+construction sites, or participants' homes.
+
+\subsection{Raw data access and export formats}
+
+At each time step, the system delivers an unfiltered data packet containing:
+
+\begin{enumerate}
+	\item Sacral Euler angles (pitch, roll) from the base \acs{IMU} (\si{\degree}).
+	\item 18 local sagittal flexion angles from the strain gauges (\si{\degree}).
+	\item 18 local torsion angles around the longitudinal axis (\si{\degree}).
+	\item Global 3D Cartesian coordinates for all 18 segments (mm), computed via the
+	      \ac{DH} chain.
+	\item Pre-computed aggregate metrics: lumbar partial angle, thoracic partial angle,
+	      total trunk torsion.
+\end{enumerate}
+
+Researchers visualise, annotate, and export these datasets through the
+\textbf{FlexLab Studio} desktop application.
+FlexLab Studio provides a 3D real-time rendering of the reconstructed spinal shape
+alongside time-series plots, event annotation tools, and batch export functionality.
+
+For maximum read/write performance with large longitudinal datasets, the software
+provides the proprietary \acf{RSF} (a compressed binary format optimised for the
+multi-channel time series structure) and the columnar Apache Parquet format.
+For compatibility with established statistical environments (SPSS, R, Python/Pandas,
+MATLAB), standard CSV export is also available.
+
+\subsection{The \emph{flexlib} Python library}
+
+Post-hoc analysis of large longitudinal datasets --- which may contain hundreds of
+millions of individual time points from multi-week recordings --- is facilitated by
+\emph{flexlib}, an open-architecture Python library.
+\emph{Flexlib} loads proprietary \acs{RSF} data directly into Python and exposes
+validated algorithms for bending detection, ergonomic scoring, and postural
+state classification.
+
+The computationally intensive \ac{DH} transformation pipeline is implemented as a
+Rust back-end compiled into the Python package via Maturin, providing near-native
+execution speed for bulk processing without requiring participants to perform
+computations on the sensor hardware.
+
+\subsection{Hysteresis-based postural state detection}
+
+High-frequency sensor time series from the human body contain inherent noise from
+minor muscle fasciculations, respiratory mechanics, and micro-vibrations.
+A naive threshold algorithm --- ``lumbar angle above $X$\si{\degree} defines the
+state \emph{flexed}'' --- produces rapid false toggling (flickering) around the
+boundary whenever the signal oscillates near the threshold due to this noise.
+
+\emph{Flexlib} addresses this with Schmitt-trigger-style hysteresis filters: each
+postural state is associated with a separate entry threshold and a lower exit
+threshold.
+The system transitions into the state only when the signal exceeds the entry
+threshold, and leaves it only when the signal drops below the (lower) exit
+threshold.
+The hysteresis band effectively suppresses noise-driven toggling and produces
+stable, physiologically interpretable state sequences \cite{walkling2025}.
+
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				name=signal,
+				width=0.82\textwidth,
+				height=4.5cm,
+				xmin=0, xmax=10,
+				ymin=10, ymax=45,
+				xlabel={},
+				ylabel={Lumbar angle (°)},
+				ylabel style={font=\small},
+				yticklabel style={font=\small},
+				xticklabels={},
+				tick style={draw=gray!50},
+				axis line style={draw=gray!60},
+				grid=major,
+				grid style={dashed, gray!25},
+				clip=false,
+			]
+			% Simulated noisy lumbar angle signal
+			\addplot[minktecBlue, thick, smooth] coordinates {
+					(0,20)(0.5,22)(1,28)(1.5,31)(2,33)(2.5,34)(3,34.5)(3.5,33)(4,30)(4.5,27)
+					(5,25)(5.5,24)(6,23)(6.5,22)(7,20)(7.5,19)(8,18)(8.5,20)(9,23)(9.5,24)(10,25)
+				};
+			% Entry threshold (upper)
+			\draw[red!70!black, dashed, thick] (axis cs:0,32) -- (axis cs:10,32)
+			node[right, font=\footnotesize, red!70!black] {entry ($\theta_\text{on}$)};
+			% Exit threshold (lower)
+			\draw[orange!80!black, dashed, thick] (axis cs:0,26) -- (axis cs:10,26)
+			node[right, font=\footnotesize, orange!80!black] {exit ($\theta_\text{off}$)};
+			% Highlight active zone
+			\fill[minktecBlue!15, opacity=0.5] (axis cs:1.8,26) rectangle (axis cs:4.3,32);
+		\end{axis}
+
+		% State output panel below
+		\begin{axis}[
+				name=state,
+				at={(signal.below south west)}, anchor=above north west,
+				yshift=-4mm,
+				width=0.82\textwidth,
+				height=2.0cm,
+				xmin=0, xmax=10,
+				ymin=-0.1, ymax=1.3,
+				xlabel={Time (arbitrary units)},
+				xlabel style={font=\small},
+				ylabel={State},
+				ylabel style={font=\small},
+				yticklabel style={font=\small},
+				xticklabel style={font=\small},
+				ytick={0,1},
+				yticklabels={off, on},
+				tick style={draw=gray!50},
+				axis line style={draw=gray!60},
+				grid=major,
+				grid style={dashed, gray!25},
+			]
+			% Step function: off until signal exceeds entry, on until below exit
+			\addplot[minktecNavy, very thick, const plot] coordinates {
+					(0,0)(1.8,0)(1.8,1)(4.3,1)(4.3,0)(10,0)
+				};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Schmitt-trigger hysteresis in the postural state detector. The sensor signal (top) crosses the entry threshold~$\theta_\text{on}$ at $t \approx 1.8$, triggering the \emph{flexed} state (bottom). The state persists until the signal drops below the lower exit threshold~$\theta_\text{off}$ at $t \approx 4.3$, preventing false toggling from noise oscillations near a single boundary.}
+	\label{fig:hysteresis}
+\end{figure}
+
+\subsection{Real-time interaction via \emph{fiffi\_unleashed}}
+
+For experimental designs that require acute behavioural modification, the
+\emph{fiffi\_unleashed} API provides bidirectional real-time access to the sensor.
+
+On the input side, the complete 3D data stream is available at the configured
+sampling rate and can be fed directly into external simulation environments such as
+Unity or OpenSim for real-time skeletal animation or biomechanical modelling.
+
+On the output side, the API exposes the onboard vibration motor.
+Researchers can trigger specific vibration patterns programmatically --- for example,
+activating a brief pulse whenever the cumulative time in lumbar hyperkyphosis exceeds
+a configurable threshold --- to provide unobtrusive tactile nudges that prompt
+postural correction without interrupting the participant's task \cite{walkling2025}.

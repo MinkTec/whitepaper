@@ -1,0 +1,42 @@
+% ============================================================
+\section*{Executive Summary}
+\addcontentsline{toc}{section}{Executive Summary}
+% ============================================================
+
+Understanding how the human spine moves across a full working day or night of sleep
+has, until recently, required either a laboratory equipped with optical motion-capture
+cameras or a battery of inertial sensors that accumulate drift within minutes of
+deployment in any magnetically disturbed environment.
+Neither approach yields ecologically valid longitudinal data at the resolution that
+spine biomechanics demands.
+
+This document describes and evaluates FlexTail, a wearable spine sensor developed by
+MinkTec GmbH \cite{minktec2025} that measures 3D spinal shape continuously by fusing an 18-pair
+differential strain-gauge array with a six-axis \ac{IMU} mounted
+at the sacrum.
+Unlike orientation-based IMU systems, strain gauges directly encode the local curvature
+of the substrate at each measurement point; the \ac{DH} kinematic chain then
+reconstructs the full 3D spine curve at up to 100\,Hz.
+The sensor operates without a magnetometer and is therefore immune to the ferromagnetic
+interference that dominates hospitals, construction sites, and households.
+
+Independent peer-reviewed studies demonstrate:
+
+\begin{itemize}
+	\item A mean angular error of \ang{0.8}--\ang{1.1} on standardised in-vitro templates
+	      (Masch et al., internal validation, reported in \cite{walkling2025}), comparable
+	      to clinical surface measurement devices \cite{spinalMouse}.
+	\item A mean F1-score of 0.90 for 14-class human activity recognition at a 1-second
+	      window \cite{walkling2025}, outperforming a video-based pose-estimation baseline
+	      for trunk-posture transitions (95\,\% vs.\ 76\,\% accuracy for sit-to-stand).
+	\item A 60\,\% reduction in time spent in flexed spinal postures when construction
+	      workers used a collaborative 3D-printing robot instead of manual concretework,
+	      quantified on an active building site where optical motion capture is
+	      structurally impractical \cite{sawicki2026}.
+\end{itemize}
+
+The system is available in compression-shirt form (lengths 36\,cm or 45\,cm), weighs
+30\,g, runs for up to 30\,h per charge, and provides researchers with full raw-data
+access via CSV, Parquet, or the proprietary \acs{RSF} format.
+
+\newpage

@@ -19,6 +19,9 @@ All agent definitions are stored in `.opencode/agents/`:
 
 **`MEMORY.md`** (repo root) is the shared long-term memory across all sessions and agents.
 
+## Python
+Use only uv tor run python stuff.
+
 ### Structure
 
 ```markdown
@@ -385,92 +388,3 @@ Executive Summary...
 - PDF: `content/[slug]/04_latex/build/[slug].pdf`
 - Final: `content/[slug]/04_final/post_ready.md`
 
-## Strapi CMS Integration
-
-### Reading Existing Articles
-Before creating new content, read existing articles to maintain voice consistency:
-```bash
-strapi_list_entries(content_type="articles", page=1, page_size=20, sort="createdAt:desc")
-```
-Review 3-5 recent articles to understand current tone, structure, and style.
-
-### Publishing New Articles
-
-**CRITICAL: Create one article with two locales - not two separate articles.**
-
-The SEO Optimizer (Stage 5) must:
-1. Read `MEMORY.md` to check if this whitepaper was previously published (avoid duplicates)
-2. Read the final post from `content/[slug]/04_final/post_ready.md`
-3. Detect content language from the first 200 characters:
-   - German indicators: "du", "deine", "der", "die", "das", "und", "für", ä, ö, ü, ß
-   - English indicators: "you", "your", "the", "and", "for", "with"
-4. Create the primary locale entry in Strapi using `strapi_create_entry`
-5. Translate and create the second locale entry on the **same document**
-6. Verify both locales with `strapi_get_entry`
-7. Record both document IDs in `MEMORY.md` under "Completed Whitepapers"
-
-**Required fields for `strapi_create_entry`:**
-```json
-{
-  "content_type": "articles",
-  "locale": "de",
-  "data": {
-    "title": "Whitepaper Title",
-    "content": "Full markdown content",
-    "slug": "url-friendly-slug",
-    "excerpt": "Brief description (150-160 chars)",
-    "metaTitle": "SEO title tag (50-60 chars)",
-    "metaDescription": "SEO meta description (150-160 chars)",
-    "publishedAt": "2026-02-23T10:00:00Z"
-  }
-}
-```
-
-**Required `post_ready.md` frontmatter:**
-```yaml
----
-title_tag: "Primary Keyword: Descriptive Subtitle"
-meta_description: "Concise summary with value proposition (150-160 chars)"
-slug: "primary-keyword-topic-slug"
-locale: "de"
----
-```
-
-**Verification after publishing both locales:**
-```bash
-strapi_get_entry({ content_type: "articles", document_id: "xxx", locale: "de" })
-strapi_get_entry({ content_type: "articles", document_id: "xxx", locale: "en" })
-```
-
-### Strapi Schema
-- `title`: Whitepaper title
-- `content`: Full markdown content
-- `slug`: URL-friendly identifier
-- `excerpt`: Brief description for previews (150-160 chars)
-- `locale`: Language (`de`/`en`) - **CRITICAL: Must match content language**
-- `metaTitle`: SEO title tag (50-60 chars)
-- `metaDescription`: SEO meta description (150-160 chars)
-- `publishedAt`: Publication timestamp
-- `tags`: Optional array of tag strings
-- `featured`: Boolean for featured articles
-
-## Session ID Tracking
-
-**Critical**: Use `task_id` to chain agents through the pipeline:
-
-1. **First call**: Omit `task_id` - agent creates initial `.progress.json` and seeds `MEMORY.md`
-2. **Subsequent calls**: Pass the same `task_id` to maintain session continuity
-3. **Both files**: Each agent reads `.progress.json` (stage state) AND `MEMORY.md` (cross-session knowledge)
-
-Example:
-```bash
-# Stage 1 - no task_id
-task(subagent_type="strategist", description="Create blueprint", prompt="...")
-# → Returns task_id: ses_abc123
-
-# Stage 2 - continue session
-task(subagent_type="researcher", description="Research", prompt="...", task_id="ses_abc123")
-
-# Stage 3
-task(subagent_type="writer", description="Write", prompt="...", task_id="ses_abc123")
-```

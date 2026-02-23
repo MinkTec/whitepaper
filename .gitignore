@@ -1,0 +1,4 @@
+src/version.tex
+build/
+
+*.bak[0-9]*
