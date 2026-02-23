@@ -1,0 +1,36 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download and Setup Tectonic
+        run: |
+          TECTONIC_VERSION=$(curl -sL https://api.github.com/repos/tectonic-typesetting/tectonic/releases/latest | grep -oP '"tag_name": "tectonic@\K[0-9.]+')
+          curl -sLO "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          tar -xzf "tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          chmod +x tectonic
+
+      - name: Build PDF
+        run: ./tectonic -X build
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            build/flextail-whitepaper.pdf
+          generate_release_notes: true
+          draft: false
+          prerelease: false
