@@ -1,7 +1,7 @@
 INFO:  latexindent.pl version 3.24.7, 2025-08-15, a script to indent .tex files
        latexindent.pl lives here: C:/Users/jonas/AppData/Roaming/MiKTeX/scripts/latexindent/
-       Mon Feb 23 12:03:14 2026
-       Filename: E:\whitepaper\src\sections\validation.tex
+       Mon Mar  2 12:39:02 2026
+       Filename: E:/whitepaper/src/sections/background.tex
 INFO:  Processing switches:
        -s|--silent: Silent mode active (you have used either -s or --silent)
        -w|--overwrite: Overwrite mode active, will make a back up before overwriting
@@ -23,30 +23,14 @@ INFO:  YAML reading settings
        latexindent.pl didn't find indentconfig.yaml or .indentconfig.yaml
        see all possible locations: https://latexindentpl.readthedocs.io/en/latest/sec-appendices.html#indentconfig-options)
 INFO:  Backup procedure (-w flag active):
-       E:\whitepaper\src\sections\validation.bak0 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak1 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak2 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak3 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak4 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak5 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak6 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak7 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak8 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak9 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak10 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak11 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak12 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak13 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak14 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       E:\whitepaper\src\sections\validation.bak15 already exists, incrementing by 1 (see maxNumberOfBackUps)
-       Backing up E:\whitepaper\src\sections\validation.tex to E:\whitepaper\src\sections\validation.bak16...
-       E:\whitepaper\src\sections\validation.tex will be overwritten after indentation
+       Backing up E:/whitepaper/src/sections/background.tex to E:\whitepaper\src\sections\background.bak0...
+       E:/whitepaper/src/sections/background.tex will be overwritten after indentation
 INFO:  Phase 1: searching for objects
 INFO:  Phase 2: finding surrounding indentation
 INFO:  Phase 3: indenting objects
 INFO:  Phase 4: final indentation check
 INFO:  Output routine:
-       Overwriting file E:\whitepaper\src\sections\validation.tex
+       Overwriting file E:/whitepaper/src/sections/background.tex
        --------------
 INFO:  Please direct all communication/issues to:
         https://github.com/cmhughes/latexindent.pl

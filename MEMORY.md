@@ -17,6 +17,7 @@
 | Madgwick et al. (2011) | IMU/MARG gradient descent algorithm | src/refs.bib (madgwick2011) | Yaw drift in ferromagnetic environments |
 | Burdorf & Sorock (1997) | Back disorder risk factors | src/refs.bib (ljungberg2004) | Stored under ljungberg2004 key |
 | Daneshmandi et al. (2017) | Prolonged sitting effects | src/refs.bib (hawkins2007) | Stored under hawkins2007 key |
+| 10.1016/j.jbiomech.2019.08.006 | Swain et al. (2020) - No consensus on causality of spine postures and LBP | src/refs.bib (swain2020) | Umbrella review of 41 systematic reviews; PMID 31451200. Used in clinical blindspot argument (background.tex). Key finding: association documented but causal inference blocked by absence of continuous real-world kinematic data. |
 
 ## Key Decisions
 - [2026-02-23] [flextail-whitepaper] Use palatino + T1 fontenc instead of fontspec/TeX Gyre Pagella (not in Tectonic bundle)
@@ -26,6 +27,7 @@
 - [2026-02-23] [flextail-whitepaper] cleveref must load AFTER hyperref
 - [2026-02-23] [flextail-whitepaper] BibTeX keys: ljungberg2004 = Burdorf/Sorock 1997; hawkins2007 = Daneshmandi 2017 (legacy naming)
 - [2026-02-23] [flextail-whitepaper] PDF output: build/default/default.pdf (66.69 KiB)
+- [2026-03-02] [flextail-whitepaper] Added SPINE20 2025 Cape Town policy recommendations as Tier 4 (expert consensus) citation to strengthen occupational and background arguments. Ref key: spine20_2025.
 
 ## Errors & Lessons Learned
 - [2026-02-23] Tectonic -X build scans src/ alphabetically and picks the first .tex as entry - _preamble.tex sorts before index.tex, causing "usepackage before documentclass" error. Fix: remove extra .tex files from src/ or ensure only one .tex file exists there.

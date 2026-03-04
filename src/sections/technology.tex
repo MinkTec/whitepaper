@@ -147,8 +147,7 @@ of each segment at each time step.
 	\label{fig:dh_chain}
 \end{figure}
 
-The detailed implementation of the DH reconstruction and the hysteresis-based postural
-state filters is described in \cref{sec:software}.
+The detailed implementation of the DH reconstruction is described in \cref{sec:software}.
 
 \subsection{Magnetometer-free design}
 
@@ -190,5 +189,12 @@ mechanical coupling without external compression.
 
 The total system weight is 30\,g.
 The integrated 300\,mAh lithium-ion cell provides up to 30\,h of continuous recording.
-The hardware module detaches from the shirt, allowing standard machine laundering
-and enabling use in clinical hygiene cycles.
+The FlexTail sensor strip and its electronics module detach from the shirt as a
+single unit, leaving a plain compression garment that tolerates standard machine
+laundering without restriction.
+This architecture sidesteps the durability problems endemic to conventional smart
+textiles, where conductive yarns delaminate, resistive traces crack, and embedded
+electronics corrode after repeated wash cycles \cite{rotzler2021, stoppa2014}.
+Because the sensor never enters the wash, its printed strain-gauge traces and
+mechanical substrate are unaffected by detergents, heat, or mechanical agitation,
+and the garment itself is treated no differently from ordinary athletic wear.
