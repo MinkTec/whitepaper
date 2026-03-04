@@ -1,9 +1,26 @@
 \documentclass[11pt, a4paper]{article}
 
 % --- Font & encoding ---
-\usepackage[T1]{fontenc}
-\usepackage{signika}   % Signika as body font (Rectify brand: Fließtext)
-\usepackage{tgheros}   % TeX Gyre Heros as \sffamily (Neue Haas Grotesk substitute for headings)
+% Rectify brand fonts loaded from local TTF files via fontspec (XeTeX)
+\usepackage{fontspec}
+\setmainfont[
+    Path               = ../fonts/signika_negative/,
+    Extension          = .ttf,
+    UprightFont        = SignikaNegative-Regular,
+    BoldFont           = SignikaNegative-Bold,
+    ItalicFont         = SignikaNegative-Regular,
+    ItalicFeatures     = {FakeSlant=0.2},
+    BoldItalicFont     = SignikaNegative-Bold,
+    BoldItalicFeatures = {FakeSlant=0.2},
+]{Signika Negative}
+\setsansfont[
+    Path           = ../fonts/neue_haas_display/,
+    Extension      = .ttf,
+    UprightFont    = NeueHaasDisplayRoman,
+    BoldFont       = NeueHaasDisplayBold,
+    ItalicFont     = NeueHaasDisplayRomanItalic,
+    BoldItalicFont = NeueHaasDisplayBoldItalic,
+]{Neue Haas Display}
 
 % --- Core maths ---
 \usepackage{amsmath}
@@ -23,8 +40,11 @@
 % Rectify primary palette
 \definecolor{rectifyMidnight}{HTML}{1E2880}  % authority, headings, rules
 \definecolor{rectifyFire}{HTML}{F57129}       % energy, accent, active elements
+
 \definecolor{rectifyLavender}{HTML}{A4A4FF}  % secondary, chart fill
 \definecolor{rectifyGrey}{HTML}{D2D2DD}      % subtle separators
+\definecolor{rectifyFireDimmed}{HTML}{F3B38F}
+\definecolor{rectifyFireLight}{HTML}{FCDCC9}
 
 % Derived utility colours
 \definecolor{rowgray}{HTML}{EAEAF0}           % table row shading (light Midnight-tinted grey)
@@ -35,7 +55,7 @@
 
 % --- TikZ & pgfplots ---
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, decorations.pathmorphing}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, shapes.misc, calc, decorations.pathmorphing}
 \usepackage{pgfplots}
 
 % Rectify chart cycle: Midnight → Fire → Lavender (then dashed variants)
@@ -68,6 +88,65 @@
 % --- Acronyms ---
 \usepackage[printonlyused]{acronym}
 
+% --- Pill badge component ---
+% Renders a white-outlined rounded-rectangle badge around inline text.
+% Usage:
+%   \pill{Version \paperversion}        — default padding (3ex)
+%   \pill[4ex]{02. 2026}               — override inner xsep for shorter strings
+\newcommand{\pill}[2][3ex]{%
+    \begin{tikzpicture}
+        \node[
+            draw=white,
+            line width=0.8pt,
+            shape=rounded rectangle,
+            inner xsep=#1,
+            inner ysep=1.2ex,
+            text=white,
+            font=\small\sffamily\bfseries,
+        ] {#2};
+    \end{tikzpicture}%
+}
+
+% --- Factbox callout component ---
+% Two colour variants: fire (salmon) and lavender
+% Usage:
+%   \begin{factboxfire}  Text Goes Here  \end{factboxfire}
+%   \begin{factboxlavender}  Text Goes Here  \end{factboxlavender}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+\definecolor{factboxLavenderBg}{HTML}{D2D2FF}
+
+\newenvironment{factboxfire}{%
+    \begin{center}%
+    \begin{tcolorbox}[%
+        enhanced jigsaw, nobeforeafter,
+        boxrule=0pt, frame hidden,
+        arc=10pt, colback=rectifyFireLight,
+        fontupper=\bfseries\sffamily,
+        halign=center,
+        left=8mm, right=8mm, top=7mm, bottom=7mm,
+        width=0.67\textwidth]%
+}{%
+    \end{tcolorbox}%
+    \end{center}%
+}
+
+\newenvironment{factboxlavender}{%
+    \begin{center}%
+    \begin{tcolorbox}[%
+        enhanced jigsaw, nobeforeafter,
+        boxrule=0pt, frame hidden,
+        arc=10pt, colback=factboxLavenderBg,
+        fontupper=\bfseries\sffamily,
+        halign=center,
+        left=8mm, right=8mm, top=7mm, bottom=7mm,
+        width=0.67\textwidth]%
+}{%
+    \end{tcolorbox}%
+    \end{center}%
+}
+
 % --- Geometry ---
 \usepackage[
     top=28mm, bottom=28mm,
@@ -86,14 +165,16 @@
 % Headings: TeX Gyre Heros Bold in Midnight; Fire rule underneath
 \usepackage{titlesec}
 \titleformat{\section}
-    {\large\bfseries\sffamily\color{rectifyMidnight}}
+    {\Huge\bfseries\sffamily\color{black}}
     {}{0em}{}
-    [{\color{rectifyFire}\vspace{1pt}\titlerule[1.5pt]}]
+
+
 \titleformat{\subsection}
-    {\normalsize\bfseries\sffamily\color{rectifyMidnight}}
+    {\LARGE\bfseries\sffamily\color{black}}
     {}{0em}{}
+
 \titleformat{\subsubsection}
-    {\normalsize\itshape\sffamily}
+    {\Large\bfseries\sffamily\color{black}}
     {}{0em}{}
 
 % --- Header / footer ---
@@ -106,7 +187,7 @@
     {\color{rectifyMidnight}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}}
 \makeatother
 \fancyhead[L]{\small\textit{FlexTail -- 3D Spinal Shape Reconstruction}}
-\fancyhead[R]{\small\textbf{\color{rectifyMidnight}rectify}}
+\fancyhead[R]{\includegraphics[height=5mm]{rectify_logo}}
 \fancyfoot[C]{\small\thepage}
 
 % --- PDF links --- LOAD LAST ---
@@ -114,7 +195,7 @@
     colorlinks=true,
     linkcolor=rectifyMidnight,
     citecolor=rectifyMidnight,
-    urlcolor=rectifyFire,
+    urlcolor=rectifyMidnight,
     pdftitle={Three-Dimensional Spinal Shape Reconstruction for Ambulatory Biomechanics},
     pdfauthor={Jonas Walkling, Luca Sander, Arwed Masch, Thomas M. Deserno -- rectify},
     pdfkeywords={spine biomechanics, wearable sensor, shape reconstruction, strain gauge, ergonomics}
@@ -123,41 +204,66 @@
 % --- Smart cross-references (MUST load after hyperref) ---
 \usepackage{cleveref}
 
-% --- Version (generated by justfile from VERSION) ---
 \input{version}
 
 \begin{document}
 
 \begin{titlepage}
-	% --- Key visual: 60° accent line (Rectify brand motif, from logo angle) ---
+	\pagecolor{rectifyMidnight}
+	% --- Key visual: gradient pill shapes, tilted at -30°, non-overlapping ---
 	\begin{tikzpicture}[remember picture, overlay]
-		\draw[rectifyFire, line width=2pt, line cap=round]
-		([xshift=-20mm, yshift=-65mm]current page.north east) --
-		([xshift=-50mm, yshift=-117mm]current page.north east);
+		% Second pill (Right - subtle, back)
+		% First pill (Left - main, front)
+		\node[
+			rotate=-35,
+			top color=white!10!rectifyLavender,
+			bottom color=rectifyMidnight,
+			shading angle=15,
+			rounded corners=50mm,
+			minimum width=100mm,
+			minimum height=420mm,
+		] at ([xshift=40mm, yshift=-40mm]current page.south west) {};
+		\node[
+			rotate=-35,
+			top color=white!35!rectifyLavender,
+			bottom color=rectifyMidnight,
+			shading angle=15,
+			rounded corners=45mm,
+			minimum width=90mm,
+			minimum height=320mm,
+		] at ([xshift=127mm, yshift=-80mm]current page.south west) {};
 	\end{tikzpicture}%
-	% --- Logo top-right ---
-	\begin{flushright}
-		\includegraphics[width=5.5cm]{rectify_logo}
-	\end{flushright}
-	\vspace{10mm}
+	% --- Top bar: version/date on left, logo on right ---
+	\vspace*{-10mm}
+	\noindent
+	\begin{minipage}[t]{0.5\textwidth}
+		\vspace{0pt}
+		\pill{Version \paperversion}\\[1.5ex]
+		\pill[4ex]{02. 2026}
+	\end{minipage}%
+	\begin{minipage}[t]{0.5\textwidth}
+		\vspace{0pt}
+		\raggedleft
+		\includegraphics[width=6.5cm]{rectify_logo_white}
+	\end{minipage}\par
+	\vspace{45mm}
 	% --- Title block ---
-	{\LARGE\bfseries\sffamily\color{rectifyMidnight}
-		Three-Dimensional Spinal Shape Reconstruction\\[4pt]
-		for Ambulatory Biomechanics\par}
-	\vspace{6mm}
-	{\large A Technical and Scientific Assessment of the FlexTail Sensor System\par}
-	\vspace{10mm}
-	\textcolor{rectifyFire}{\hrule height 1.2pt}
-	\vspace{6mm}
+	{\fontsize{38}{46}\selectfont\bfseries\sffamily\color{white}
+		Three-Dimensional\\[6pt]
+		Spinal Shape\\[6pt]
+		Reconstruction for\\[6pt]
+		Ambulatory\\[6pt]
+		Biomechanics\par}
+	\vspace{16mm}
+	{\fontsize{26}{32}\selectfont\color{white}\bfseries A Technical and Scientific Assessment of the FlexTail Sensor System\par}
+	\vspace{16mm}
 	% --- Authors ---
-	\vspace{3mm}
-	{\small MinkTec GmbH, Braunschweig, Germany\par}
-	\vspace{4mm}
-	{\normalsize February 2026 \quad v\paperversion\par}
+	{\Large\color{white} MinkTec GmbH, Braunschweig, Germany\par}
 	\vfill
-	{\small\textit{Contact: \href{mailto:info@minktec.com}{info@minktec.com} \quad
-			\url{https://www.minktec.com}}\par}
+	\pill{\hypersetup{urlcolor=white}\href{mailto:info@rectify.de}{info@rectify.de}}\hspace{2ex}%
+	\pill{\hypersetup{urlcolor=white}\url{https://www.rectify.de}}\par
 \end{titlepage}
+\pagecolor{white}
 
 {\setlength{\parskip}{1pt}\tableofcontents}
 \newpage
