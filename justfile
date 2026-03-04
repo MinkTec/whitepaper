@@ -3,6 +3,7 @@ version := `cat VERSION`
 
 build:
 	printf '\\\\newcommand{\\\\paperversion}{%s}' {{version}} > src/version.tex
+	epstopdf assets/rectify_logo.eps assets/rectify_logo.pdf
 	tectonic -X build
 
 watch:

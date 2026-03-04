@@ -2,7 +2,8 @@
 
 % --- Font & encoding ---
 \usepackage[T1]{fontenc}
-\usepackage[lf,default]{sourcesanspro}
+\usepackage{signika}   % Signika as body font (Rectify brand: Fließtext)
+\usepackage{tgheros}   % TeX Gyre Heros as \sffamily (Neue Haas Grotesk substitute for headings)
 
 % --- Core maths ---
 \usepackage{amsmath}
@@ -16,25 +17,45 @@
 \usepackage{graphicx}
 \graphicspath{{../assets/}}
 
-% --- Colour (for table rows and brand) --- load BEFORE tikz to avoid option clash ---
+% --- Colour --- load BEFORE tikz to avoid option clash ---
 \usepackage[table]{xcolor}
-\definecolor{rowgray}{gray}{0.94}
-\definecolor{minktecNavy}{HTML}{1b2046}
-\definecolor{minktecBlue}{HTML}{0385ad}
+
+% Rectify primary palette
+\definecolor{rectifyMidnight}{HTML}{1E2880}  % authority, headings, rules
+\definecolor{rectifyFire}{HTML}{F57129}       % energy, accent, active elements
+\definecolor{rectifyLavender}{HTML}{A4A4FF}  % secondary, chart fill
+\definecolor{rectifyGrey}{HTML}{D2D2DD}      % subtle separators
+
+% Derived utility colours
+\definecolor{rowgray}{HTML}{EAEAF0}           % table row shading (light Midnight-tinted grey)
+
+% Legacy aliases -- used by TikZ diagrams in section files
+\colorlet{minktecNavy}{rectifyMidnight}
+\colorlet{minktecBlue}{rectifyFire}
 
 % --- TikZ & pgfplots ---
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta, positioning, shapes.geometric, calc, decorations.pathmorphing}
 \usepackage{pgfplots}
+
+% Rectify chart cycle: Midnight → Fire → Lavender (then dashed variants)
+\pgfplotscreateplotcyclelist{rectify}{
+    {rectifyMidnight, thick},
+    {rectifyFire, thick},
+    {rectifyLavender!70!black, thick},
+    {rectifyMidnight!60, thick, dashed},
+    {rectifyFire!60, thick, dashed},
+}
 \pgfplotsset{
-	compat=1.18,
-	every axis/.append style={
-		font=\small\sffamily,
-	},
-	label style={font=\small\sffamily},
-	tick label style={font=\small\sffamily},
-	legend style={font=\small\sffamily},
-	every node near coord/.append style={font=\footnotesize\sffamily},
+    compat=1.18,
+    cycle list name=rectify,
+    every axis/.append style={
+        font=\small\sffamily,
+    },
+    label style={font=\small\sffamily},
+    tick label style={font=\small\sffamily},
+    legend style={font=\small\sffamily},
+    every node near coord/.append style={font=\footnotesize\sffamily},
 }
 
 % --- Microtypography ---
@@ -49,8 +70,8 @@
 
 % --- Geometry ---
 \usepackage[
-	top=28mm, bottom=28mm,
-	left=32mm, right=32mm
+    top=28mm, bottom=28mm,
+    left=32mm, right=32mm
 ]{geometry}
 
 % --- Line spacing ---
@@ -62,29 +83,41 @@
 \setlength{\parskip}{7pt}
 
 % --- Section title formatting ---
+% Headings: TeX Gyre Heros Bold in Midnight; Fire rule underneath
 \usepackage{titlesec}
-\titleformat{\section}{\large\bfseries\sffamily}{}{0em}{}[\vspace{1pt}\titlerule]
-\titleformat{\subsection}{\normalsize\bfseries\sffamily}{}{0em}{}
-\titleformat{\subsubsection}{\normalsize\itshape\sffamily}{}{0em}{}
+\titleformat{\section}
+    {\large\bfseries\sffamily\color{rectifyMidnight}}
+    {}{0em}{}
+    [{\color{rectifyFire}\vspace{1pt}\titlerule[1.5pt]}]
+\titleformat{\subsection}
+    {\normalsize\bfseries\sffamily\color{rectifyMidnight}}
+    {}{0em}{}
+\titleformat{\subsubsection}
+    {\normalsize\itshape\sffamily}
+    {}{0em}{}
 
 % --- Header / footer ---
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
-\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrulewidth}{0.6pt}
+\makeatletter
+\renewcommand{\headrule}{%
+    {\color{rectifyMidnight}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}}
+\makeatother
 \fancyhead[L]{\small\textit{FlexTail -- 3D Spinal Shape Reconstruction}}
-\fancyhead[R]{\small MinkTec GmbH}
+\fancyhead[R]{\small\textbf{\color{rectifyMidnight}rectify}}
 \fancyfoot[C]{\small\thepage}
 
 % --- PDF links --- LOAD LAST ---
 \usepackage[
-	colorlinks=true,
-	linkcolor=black,
-	citecolor=black,
-	urlcolor=blue,
-	pdftitle={Three-Dimensional Spinal Shape Reconstruction for Ambulatory Biomechanics},
-	pdfauthor={Jonas Walkling, Luca Sander, Arwed Masch, Thomas M. Deserno -- MinkTec GmbH},
-	pdfkeywords={spine biomechanics, wearable sensor, shape reconstruction, strain gauge, ergonomics}
+    colorlinks=true,
+    linkcolor=rectifyMidnight,
+    citecolor=rectifyMidnight,
+    urlcolor=rectifyFire,
+    pdftitle={Three-Dimensional Spinal Shape Reconstruction for Ambulatory Biomechanics},
+    pdfauthor={Jonas Walkling, Luca Sander, Arwed Masch, Thomas M. Deserno -- rectify},
+    pdfkeywords={spine biomechanics, wearable sensor, shape reconstruction, strain gauge, ergonomics}
 ]{hyperref}
 
 % --- Smart cross-references (MUST load after hyperref) ---
@@ -96,18 +129,25 @@
 \begin{document}
 
 \begin{titlepage}
+	% --- Key visual: 60° accent line (Rectify brand motif, from logo angle) ---
+	\begin{tikzpicture}[remember picture, overlay]
+		\draw[rectifyFire, line width=2pt, line cap=round]
+		([xshift=-20mm, yshift=-65mm]current page.north east) --
+		([xshift=-50mm, yshift=-117mm]current page.north east);
+	\end{tikzpicture}%
 	% --- Logo top-right ---
 	\begin{flushright}
-		\includegraphics[width=5.5cm]{minktece_logo}
+		\includegraphics[width=5.5cm]{rectify_logo}
 	\end{flushright}
 	\vspace{10mm}
 	% --- Title block ---
-	{\LARGE\bfseries\color{minktecNavy} Three-Dimensional Spinal Shape Reconstruction\\[4pt]
+	{\LARGE\bfseries\sffamily\color{rectifyMidnight}
+		Three-Dimensional Spinal Shape Reconstruction\\[4pt]
 		for Ambulatory Biomechanics\par}
 	\vspace{6mm}
 	{\large A Technical and Scientific Assessment of the FlexTail Sensor System\par}
 	\vspace{10mm}
-	\textcolor{minktecBlue}{\hrule height 1.2pt}
+	\textcolor{rectifyFire}{\hrule height 1.2pt}
 	\vspace{6mm}
 	% --- Authors ---
 	\vspace{3mm}
