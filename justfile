@@ -2,12 +2,11 @@
 version := `cat VERSION`
 
 build:
-	printf '\\newcommand{\\paperversion}{%s}' {{version}} > src/version.tex
-	epstopdf assets/rectify_logo.eps assets/rectify_logo.pdf
-	tectonic -X build
+	echo '\newcommand{\paperversion}{'{{version}}'}' > src/version.tex
+	cd src && tectonic -X build
 
 watch:
-	tectonic -X watch
+	cd src && tectonic -X watch
 
 release:
 	git tag v{{version}}

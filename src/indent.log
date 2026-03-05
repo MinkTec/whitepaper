@@ -1,7 +1,7 @@
 INFO:  latexindent.pl version 3.24.7, 2025-08-15, a script to indent .tex files
        latexindent.pl lives here: C:/Users/jonas/AppData/Roaming/MiKTeX/scripts/latexindent/
-       Wed Mar  4 18:19:39 2026
-       Filename: E:/whitepaper/src/index.tex
+       Thu Mar  5 08:48:58 2026
+       Filename: E:\whitepaper\src\index.tex
 INFO:  Processing switches:
        -s|--silent: Silent mode active (you have used either -s or --silent)
        -w|--overwrite: Overwrite mode active, will make a back up before overwriting
@@ -23,14 +23,16 @@ INFO:  YAML reading settings
        latexindent.pl didn't find indentconfig.yaml or .indentconfig.yaml
        see all possible locations: https://latexindentpl.readthedocs.io/en/latest/sec-appendices.html#indentconfig-options)
 INFO:  Backup procedure (-w flag active):
-       Backing up E:/whitepaper/src/index.tex to E:\whitepaper\src\index.bak0...
-       E:/whitepaper/src/index.tex will be overwritten after indentation
+       E:\whitepaper\src\index.bak0 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       E:\whitepaper\src\index.bak1 already exists, incrementing by 1 (see maxNumberOfBackUps)
+       Backing up E:\whitepaper\src\index.tex to E:\whitepaper\src\index.bak2...
+       E:\whitepaper\src\index.tex will be overwritten after indentation
 INFO:  Phase 1: searching for objects
 INFO:  Phase 2: finding surrounding indentation
 INFO:  Phase 3: indenting objects
 INFO:  Phase 4: final indentation check
 INFO:  Output routine:
-       Overwriting file E:/whitepaper/src/index.tex
+       Overwriting file E:\whitepaper\src\index.tex
        --------------
 INFO:  Please direct all communication/issues to:
         https://github.com/cmhughes/latexindent.pl

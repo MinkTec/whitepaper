@@ -1,3 +1,6 @@
 [submodule "styles"]
 	path = styles
 	url = https://github.com/MinkTec/rectify-latex-template
+[submodule "rectify-latex-template"]
+	path = rectify-latex-template
+	url = git@github.com:minktec/rectify-latex-template

@@ -3,6 +3,6 @@ name = "flextail-whitepaper"
 bundle = "https://data1.fullyjustified.net/tlextras-2022.0r0.tar"
 
 [[output]]
-name = "FlexTail Whitepaper"
+name = "FlexTail_Whitepaper"
 type = "pdf"
 preamble = "index.tex"
