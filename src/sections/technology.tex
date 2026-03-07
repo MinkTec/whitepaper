@@ -95,7 +95,7 @@ There is no accumulation of integration noise over time.
 The strain-gauge array captures the \emph{relative} shape of the spine --- how each
 segment curves relative to its neighbour.
 To express this shape in a gravity-referenced coordinate frame, a six-axis \acs{IMU}
-(three-axis accelerometer and three-axis gyroscope, \emph{no magnetometer}) is fixed
+(three-axis accelerometer and three-axis gyroscope) is fixed
 to the base housing at sacral level (S1).
 
 The software reads the sacral pitch and roll continuously and uses these as the
@@ -154,30 +154,6 @@ of each segment at each time step.
 
 The detailed implementation of the DH reconstruction is described in \cref{sec:software}.
 
-\subsection{Magnetometer-free design}
-
-The deliberate omission of a magnetometer removes a critical failure mode for
-in-the-wild use.
-Standard IMU fusion algorithms use the magnetometer to correct yaw drift by referencing
-magnetic north.
-In industrial, clinical, and domestic environments --- steel reinforcement in
-buildings, electric motors in care beds, medical equipment, and ordinary
-computer monitors --- local field distortions render the compass dysfunctional,
-producing unbounded yaw error over multi-hour recordings \cite{madgwick2011}.
-
-Yaw drift is instead managed by the \emph{flexlib} software through kinematic
-heuristics and postural state logic described in \cref{sec:software}.
-The resulting yaw stability is adequate for the postural and activity-recognition
-tasks described in this document.
-The system does not claim sub-degree absolute yaw accuracy in free ambulation;
-see \cref{sec:limitations} for a quantitative characterisation.
-
-To further minimise signal drift caused by moisture during physical exertion,
-MinkTec collaborates with TracXon in the framework of the BMBF project
-\emph{ErgoFee} (KMU-innovativ programme) to evaluate alternative pastes and
-substrates for screen-printing the conductive traces and to maximise the
-mechanical robustness of the printed gauge structures.
-
 \subsection{Textile integration and soft-tissue artefact mitigation}
 
 The sensor strip is sewn into a compression undergarment (Sensor\-shirt), available in
@@ -186,6 +162,12 @@ two lengths: 36\,cm (covering the lumbosacral and lower thoracic spine) and 45\,
 The constant, defined contact pressure of the compression knit keeps the strip aligned
 with the spinal column throughout movement, minimising the soft-tissue artefacts that
 degrade surface-mounted sensors in dynamic tasks.
+
+To further minimise signal drift caused by moisture during physical exertion,
+MinkTec collaborates with TracXon in the framework of the BMBF project
+\emph{ErgoFee} (KMU-innovativ programme) to evaluate alternative pastes and
+substrates for screen-printing the conductive traces and to maximise the
+mechanical robustness of the printed gauge structures.
 
 For scenarios in which a compression garment cannot be worn --- prolonged bed rest,
 post-operative monitoring, or spaceflight environments --- the sensor strip can be
